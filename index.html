@@ -41,33 +41,10 @@
             <a href="https://drive.google.com/file/d/1T0nsUgszFW-i9SJJuGpPC4m_Qbr-CBjr/view?usp=sharing" class="download-cv" target="_blank">View My CV</a>
 
         </section>
-        
+    
+        </div>
     </section>
-    <!-- Projects Section -->
-    <section id="projects">
-        <h2>GitHub-Projects</h2>
-        <div class="project-grid">
-            <div class="project">
-        <p> Some projects with  links.</p>
-        <h3>alx-system_engineering-devops</h3>
-      <a href="https://github.com/Mohashalaby/alx-system_engineering-devops.git" target="_blank">View on GitHub</a>
-    </li>
-    <li>
-      <h3>alx-Backend</h3>
-      <a href="https://github.com/Mohashalaby/alx-backend.git" target="_blank">View on GitHub</a>
-    </li>
-          <li>
-            <h3>akx-backend-python</h3>
-            <a href="https://github.com/Mohashalaby/alx-backend-python.git" target="_blank">View on GitHub</a>
-          </li>
-          <li>
-            <h3>alx-backend-javascript</h3>
-            <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-          </li>
-          <!-- Add more projects as needed -->
-        </ul>
-      </section>
-      
+
         <section id="projects">
             <h2>Projects</h2>
             <div class="project-grid">
@@ -179,6 +156,25 @@
 </div>
 
 <section>
+    <script>
+        fetch('https://api.github.com/users/Mohashalaby/repos')
+            .then(response => response.json())
+            .then(data => {
+                let projectSection = document.getElementById('projects');
+                data.forEach(repo => {
+                    let projectDiv = document.createElement('div');
+                    projectDiv.classList.add('project');
+                    projectDiv.innerHTML = `
+                        <h3>${repo.name}</h3>
+                        <p>${repo.description || "No description available"}</p>
+                        <a href="${repo.html_url}" target="_blank">View on GitHub</a>
+                    `;
+                    projectSection.appendChild(projectDiv);
+                });
+            })
+            .catch(error => console.error('Error fetching GitHub data:', error));
+    </script>
+    
 
 </section>
     <section id="testimonials">
@@ -194,16 +190,32 @@
         <!-- Add more testimonials as needed -->
     </section>
     
-    <!-- Contact Section -->
-        <section id="contact">
-            <h2>Contact Me</h2>
-            <form id="contact-form">
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" placeholder="Your Message" required></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </section>
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <form id="contactForm" method="POST" action="/contact">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+    
+    <script>
+        // JavaScript to handle form submission without reloading the page
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+    
+            fetch('/contact', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+
         <button id="back-to-top">Back to Top</button>
     <script src="script.js"></script>
     
